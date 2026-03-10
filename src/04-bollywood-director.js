@@ -46,12 +46,66 @@
  */
 export function createDialogueWriter(genre) {
   // Your code here
+  let arr = ['action','romance','comedy','drama']
+  if(!(arr.includes(genre))) return null
+  function dilogue(hero,villain){
+       if(!hero || hero === '' || !villain || villain === '') return '...'
+       let message
+
+              switch(genre){
+            case 'action': message = `${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`
+              break
+            case 'romance': message = `${hero} whispers: '${villain}, tum mere liye sab kuch ho'`
+              break
+            case 'comedy': message = `${hero} laughs: '${villain} bhai, kya kar rahe ho yaar!'`
+              break
+            case 'drama': message = `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`
+              break
+          }       
+          return message
+          
+
+          }
+          return dilogue // this is the example of closures that when the inner function is returned (ie the defination) then it brings the bag of lexical scopes of the outer function given the fact that defination of outer function is deleted but still there is 
+
 }
 
 export function createTicketPricer(basePrice) {
   // Your code here
+  if(typeof(basePrice) !== 'number' || basePrice<=0) return null 
+  function seat(seatType,isWeekend=false){ 
+    let price
+    switch(seatType){
+      case 'silver' :  price = basePrice * 1 // see this is also closures see the basePrice
+       break
+      case 'gold' :  price = basePrice * 1.5
+       break
+      case 'platinum' :  price = basePrice * 2 
+       break
+       default:return null
+    }
+    if(isWeekend){
+       price = Math.round(price*1.3)
+    }else{
+      price = Math.round(price)
+    }
+    return price
+  }
+  return seat
 }
 
 export function createRatingCalculator(weights) {
   // Your code here
+  if(!weights || typeof(weights) !== 'object' || weights === null || Array.isArray(weights)) return null // note no need to write weight === null as we already write !weight ie !weight means that weight === null/undefined
+
+  function calc(scores){
+    let avg = 0
+   for(let key in weights){
+    if(!weights[key] || !scores[key]) continue
+     avg += weights[key]*scores[key]
+   }
+   return parseFloat((avg).toFixed(1))
+  }
+  return calc
+
 }

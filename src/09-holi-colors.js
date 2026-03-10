@@ -55,20 +55,70 @@
  */
 export function mixColors(color1, color2) {
   // Your code here
+  if(!color1 || !color2) return null
+  let obj = {}
+  obj.name = `${color1.name}-${color2.name}`
+  obj.r = Math.round((color1.r + color2.r)/2)
+  obj.g = Math.round((color1.g + color2.g)/2)
+  obj.b = Math.round((color1.b + color2.b)/2)
+  return obj
 }
 
 export function adjustBrightness(color, factor) {
   // Your code here
+  if(!color || typeof(factor) !== 'number') return null
+
+  let obj = {}
+  obj.name = color.name
+  let r = color.r*factor
+  let g = color.g*factor
+  let b = color.b*factor
+  if(r>255) r = 255
+  if(g>255) g = 255
+  if(b>255) b = 255
+  if(r<0) r = 0
+  if(g<0) g = 0
+  if(b<0) b = 0
+  obj.r = r
+  obj.g = g
+  obj.b = b
+  return obj
 }
 
 export function addToPalette(palette, color) {
   // Your code here
+  if(!color) return [...palette]
+  if(!Array.isArray(palette)) return [color]
+  let arr = [...palette]
+  arr.push(color)
+  return arr
 }
 
 export function removeFromPalette(palette, colorName) {
   // Your code here
+  if(!Array.isArray(palette)) return []
+  let arr = []
+  for(let item of palette){
+    if(item.name === colorName) continue
+    arr.push(item)
+  }
+  return arr
 }
 
 export function mergePalettes(palette1, palette2) {
   // Your code here
+  if(!Array.isArray(palette1)){
+    palette1 = []
+  }
+  if(!Array.isArray(palette2)){
+    palette2 = []
+  }
+  let arr = [...palette1,...palette2]
+  let arr2 = []
+  for(let item of arr){
+    if(arr2.some(item2 => item2.name === item.name)) continue
+    arr2.push(item)
+  }
+  return arr2
+  
 }

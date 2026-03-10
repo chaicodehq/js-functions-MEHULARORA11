@@ -52,30 +52,73 @@
  *   recipe({ name: "Haldi" })
  *   // => { name: "Haldi", form: "powder", packed: true, label: "Haldi Masala" }
  */
-export function pipe(...fns) {
-  // Your code here
+export function compose(...fns) {
+  // Your code
+  let test = [...fns]
+  test.reverse()
+  if(fns.length === 0) {
+    return x => x
+  }
+  function composed(value){
+     return test.reduce((acc,funct) => {return funct(acc)},value)
+  }
+  return composed
+ 
 }
 
-export function compose(...fns) {
-  // Your code here
+export function pipe(...fns) {
+  // Your code
+  if(fns.length === 0) {
+    return x => x
+  }
+  function piped(value){
+    return fns.reduce((acc,funct) => {
+      return funct(acc)
+    },value)
+  }
+  return piped
 }
 
 export function grind(spice) {
   // Your code here
+  return { ...spice, form: "powder" }
 }
 
 export function roast(spice) {
   // Your code here
+  return { ...spice, roasted: true, aroma: "strong" }
 }
 
 export function mix(spice) {
   // Your code here
+  return { ...spice, mixed: true }
 }
 
 export function pack(spice) {
   // Your code here
+  return { ...spice, packed: true, label: `${spice.name} Masala` }
 }
-
+let arr = ['pack','mix','roast','grind']
+arr.reverse()
 export function createRecipe(steps) {
   // Your code here
+  if(!Array.isArray(steps) || steps.length === 0) return x => x
+  let correctSteps = steps.filter((item) => arr.includes(item))
+
+let functions = []
+for(let str of correctSteps){
+  switch(str){
+   case 'grind': functions.push(grind)
+   break
+   case 'roast': functions.push(roast)
+   break
+   case 'mix': functions.push(mix)
+   break
+   case 'pack': functions.push(pack)
+   break
+  }
+}
+
+
+  return pipe(...functions)
 }

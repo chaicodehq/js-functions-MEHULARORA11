@@ -39,20 +39,43 @@
  */
 export const calcStrikeRate = (runs, balls) => {
   // Your code here
+  if(balls<=0 || runs<0) return 0
+  let Strike_rate = parseFloat(((runs/balls)*100).toFixed(2))
+  return Strike_rate 
 };
 
 export const calcEconomy = (runsConceded, overs) => {
   // Your code here
+  if(overs<=0 || runsConceded<0) return 0
+
+  let Economy = parseFloat((runsConceded / overs).toFixed(2))
+  return Economy
 };
 
 export const calcBattingAvg = (totalRuns, innings, notOuts = 0) => {
   // Your code here
+  if(innings - notOuts <= 0) return 0
+  let Batting_avg = parseFloat((totalRuns / (innings - notOuts)).toFixed(2))
+  return Batting_avg
 };
 
 export const isAllRounder = (battingAvg, economy) => {
   // Your code here
+  if(battingAvg>30 && economy<8) return true
+  return false
 };
 
 export const getPlayerCard = (player) => {
   // Your code here
+  if( typeof(player) !== 'object' || player === null || player === undefined|| player.name === undefined || Array.isArray(player)) return null
+  
+  // note !player.name before player === null or !player ==> is wrong as if player = nill then player.name => throw an error so problem will be there
+  
+  return {
+    name:player.name,
+    strikeRate:calcStrikeRate(player.runs,player.balls),
+    economy:calcEconomy(player.runsConceded,player.overs),
+    battingAvg:calcBattingAvg(player.totalRuns,player.innings,
+      player.notOuts),isAllRounder:isAllRounder(calcBattingAvg(player.totalRuns,player.innings),calcEconomy(player.runsConceded,player.overs))
+    }
 };

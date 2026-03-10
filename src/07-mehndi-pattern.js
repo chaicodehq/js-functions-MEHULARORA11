@@ -54,20 +54,71 @@
  */
 export function repeatChar(char, n) {
   // Your code here
+  if(typeof(char) !== 'string' || char ==='') return ""
+
+  if(n<=0) return ""
+  let nChar = char + repeatChar(char,n-1)
+  return nChar
+
 }
 
 export function sumNestedArray(arr) {
   // Your code here
+  if(!Array.isArray(arr) || arr.length === 0) return 0
+
+  let first = arr[0]
+  let value
+  let rest = arr.slice(1)
+  if(Array.isArray(first)){
+value = sumNestedArray(first)
+  }else if(typeof(first) === 'number'){
+value = first
+  }else{
+    value = 0
+  }
+  return value + sumNestedArray(rest)
+
 }
 
 export function flattenArray(arr) {
   // Your code here
+  if(!Array.isArray(arr)) return []
+  if(arr.length === 0) return[] // base case
+  let value
+  let first = arr[0]
+  let rest = arr.slice(1)
+  if(Array.isArray(first)){
+    value = flattenArray(first)
+  }else{
+    value = [first]
+  }
+  return [...value,...flattenArray(rest)]
+
 }
 
 export function isPalindrome(str) {
   // Your code here
+  if(typeof(str) !== 'string') return false
+  let operator = new Intl.Collator("en",{
+    sensitivity:"base"
+  })
+  if(str.length <=1) return true
+  if(operator.compare(str.slice(0,1),str.slice(-1)) !== 0){
+    return false
+  }
+   let str2 = str.slice(1,-1)
+     return isPalindrome(str2)
+
 }
 
 export function generatePattern(n) {
   // Your code here
+  if(typeof(n) !== 'number' || n !== parseInt(n) || n<=0) return []
+let current = ""
+for(let i=0;i<n;i++){
+current+='*'
+}
+let arr = generatePattern(n-1).slice(0,n-1)
+  let pattern = Array.of(...(arr),current,...(arr.reverse()))
+return pattern
 }

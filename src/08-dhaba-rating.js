@@ -46,16 +46,75 @@
  */
 export function createFilter(field, operator, value) {
   // Your code here
+  function filter(obj){
+    switch(operator){
+    case '<': if(Number(value) === NaN) return Boolean(obj[field] < Number(value))
+      else{
+        return Boolean(obj[field] < value)
+      }
+    case '>': if(Number(value) === NaN) return Boolean(obj[field] > Number(value))
+      else{
+        return Boolean(obj[field] > value)
+      }
+    case '<=': if(Number(value) === NaN) return Boolean(obj[field] <= Number(value))
+      else{
+        return Boolean(obj[field] <= value)
+      }
+    case '>=': if(Number(value) === NaN) return Boolean(obj[field] >= Number(value))
+      else{
+        return Boolean(obj[field] >= value)
+      }
+    case '===': if(Number(value) === NaN) return Boolean(obj[field] === Number(value))
+      else{
+        return Boolean(obj[field] === value)
+      }
+    default: return false
+    
+    }
+  }
+   return filter
 }
 
 export function createSorter(field, order = "asc") {
   // Your code here
+  const collator = Intl.Collator('en',{
+    numeric:true,
+    sensitivity:"base"
+  })
+  function sort(a,b){
+   switch(order){
+    case 'asc': return collator.compare(a[field],b[field])
+    case 'desc':return  collator.compare(b[field],a[field])
+   }
+  }
+  return sort
 }
+
 
 export function createMapper(fields) {
   // Your code here
+  function map(objj){
+    let obj = {}
+      for(let item of fields){
+        if(objj.hasOwnProperty(item)){
+          obj[item] = objj[item]
+        }
+
+      }
+      return obj
+  }
+  return map
 }
 
 export function applyOperations(data, ...operations) {
   // Your code here
+  if(!Array.isArray(data) || data.length === 0) return []
+     let result = data
+  for(let i=0;i<operations.length;i++){
+    result = operations[i](result)
+  }
+  return result
+ 
+
 }
+

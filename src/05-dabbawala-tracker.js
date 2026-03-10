@@ -50,4 +50,45 @@
  */
 export function createDabbawala(name, area) {
   // Your code here
+let id =0
+let delivery = []
+  function addDelivery(from,to){
+    if(!from || !to || from === '' || to === '') return -1
+    id++
+    delivery.push({id,from,to,status:'pending'})
+    return id
+   
+  }
+  function completeDelivery(id){
+   for(let task of delivery){
+    if((task.id === id) && task.status === 'pending'){
+      task.status = 'completed'
+      return true
+    }
+   }
+   return false
+
+  }
+
+  function getActiveDeliveries(){
+    let pendingOrders = delivery.filter((item) => item.status === 'pending')
+    return [...pendingOrders] // as it is said to pass copies not references
+  }
+
+  function getStats(){
+    let success = delivery.filter((item) => item.status === 'completed').length
+    let pending = delivery.filter((item) => item.status === 'pending').length
+    let successRate =  `${((success/(success+pending))*100).toFixed(2)}%`
+    if(success + pending === 0) successRate = '0.00%'
+    return { name, area, total:success+pending, completed:success, pending, successRate }
+  }
+
+function reset(){
+  delivery = []
+  id = 0
+  return true
+}
+
+  return {addDelivery,completeDelivery,getActiveDeliveries,getStats,reset}
+
 }

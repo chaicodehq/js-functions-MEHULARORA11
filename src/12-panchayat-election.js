@@ -65,16 +65,123 @@
  */
 export function createElection(candidates) {
   // Your code here
+  
+  
+  for(let c of candidates){
+    c.votes = 0
+  }
+let dummyCandidates = [...candidates]
+
+  let registeredVoter = []
+  function registerVoter(voter){
+    let dummyVoter = {...voter}
+    if(!dummyVoter.id) return false
+    if(typeof(dummyVoter) !== 'object'  || !dummyVoter || Array.isArray(dummyVoter) || dummyVoter.age < 18) return false
+    for(let vote of registeredVoter){
+      if(!vote.id) return false
+      if(vote.id === dummyVoter.id) return false
+    }
+    dummyVoter.isVoted = false
+     registeredVoter.push(dummyVoter)
+     return true
+        
+  }
+
+  function castVote(voterId, candidateId, onSuccess, onError){
+    if(!(registeredVoter.some((voter) => voter.id === voterId && voter.isVoted === false) && dummyCandidates.some((voter) => voter.id === candidateId))){
+      return onError("voter not registered")
+    }else{
+     for(let a of registeredVoter){
+      if(a.id === voterId){
+        a.isVoted = true
+      }
+    }
+
+     for(let a of dummyCandidates){
+      if(a.id === candidateId){
+        a.votes++
+      }
+     }
+     return onSuccess({voterId,candidateId})
+    
+
+  }
+
 }
 
-export function createVoteValidator(rules) {
-  // Your code here
+function getResults(sortFn){
+  let dummy = [...dummyCandidates]
+  if(!sortFn){
+    dummy.sort((a,b) => b.votes - a.votes)
+  }else{
+    dummy.sort(sortFn)
+  }
+  return dummy
 }
+
+function getWinner(){
+  let max = {}
+  max.votes = 0
+  for(let a of dummyCandidates){
+    if(a.votes>max.votes){
+      max = a
+    }
+  }
+  if(max.votes === 0) return null
+  let count = dummyCandidates.filter((item) => item.votes === max.votes)
+  if(count.length === 0) return null
+  return count[0]
+}
+
+return {
+registerVoter,castVote,getResults,getWinner
+}
+
+}
+
+export function createVoteValidator(rules){
+  function object(obj){
+    let isValid = false
+    for(let item of rules.requiredFields){
+      if(obj.hasOwnProperty(item)){
+        isValid = true
+      }else{
+        isValid = false
+        break
+      }
+    }
+    if(obj.age <18) isValid = false
+
+    return {valid:isValid,reason:""}
+
+  }
+  return object
+}
+
+
+
 
 export function countVotesInRegions(regionTree) {
   // Your code here
+  if(!regionTree || typeof(regionTree) !== 'object') return 0
+
+  let count = regionTree.votes || 0 // important line
+  if(Array.isArray(regionTree.subRegions)){
+   for(let sub of regionTree.subRegions){
+    count+= countVotesInRegions(sub)
+   }
+  }
+  return count
+
 }
 
 export function tallyPure(currentTally, candidateId) {
   // Your code here
+  let newObj = {...currentTally}
+  if(!newObj.hasOwnProperty(candidateId)){
+    newObj[candidateId] = 1
+    return newObj
+  }
+  newObj[candidateId]++
+  return newObj
 }

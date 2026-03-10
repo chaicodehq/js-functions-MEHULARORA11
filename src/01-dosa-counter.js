@@ -33,4 +33,157 @@
  */
 export function calculateDosaOrder(type, quantity = 1, isSpicy = false) {
   // Your code here
+  if(typeof(type) !== 'string' || typeof(quantity) !== 'number' || Number.isNaN(quantity) || quantity<=0) return null
+let pricePerDosa
+let total
+
+  switch(type){
+    case 'plain':
+      if(isSpicy){
+        pricePerDosa = (40 + 10)
+        total = pricePerDosa*quantity
+      }else{
+        pricePerDosa = (40)
+         total = pricePerDosa*quantity
+      }
+      break
+    case 'masala':
+      if(isSpicy){
+        pricePerDosa = (60 + 10)
+        total = pricePerDosa*quantity
+      }else{
+        pricePerDosa = (60)
+         total = pricePerDosa*quantity
+      }
+      break
+    case 'onion':
+      if(isSpicy){
+        pricePerDosa = (50 + 10)
+        total = pricePerDosa*quantity
+      }else{
+        pricePerDosa = (50)
+         total = pricePerDosa*quantity
+      }
+      break
+    case 'butter':
+      if(isSpicy){
+        pricePerDosa = (70 + 10)
+        total = pricePerDosa*quantity
+      }else{
+        pricePerDosa = (70)
+         total = pricePerDosa*quantity
+      }
+      break
+    case 'paper':
+       if(isSpicy){
+        pricePerDosa = (90 + 10)
+        total = pricePerDosa*quantity
+      }else{
+        pricePerDosa = (90)
+         total = pricePerDosa*quantity
+      }
+      break
+    case 'cheese':
+       if(isSpicy){
+        pricePerDosa = (80 + 10)
+        total = pricePerDosa*quantity
+      }else{
+        pricePerDosa = (80)
+         total = pricePerDosa*quantity
+      }
+      break
+      default:return null
+  }
+
+
+
+  return { type,quantity,pricePerDosa,total}
 }
+
+/**
+ * 🔹 What Does This Mean?
+@ param {number} [quantity=1]
+@ param {boolean} [isSpicy=false]
+
+The square brackets [] in JSDoc mean:
+
+This parameter is OPTIONAL.
+
+And = value means:
+
+If not provided, use this default value.
+
+🔹 In Actual Function Signature
+export function calculateDosaOrder(type, quantity = 1, isSpicy = false)
+
+This is ES6 default parameter syntax.
+
+It means:
+
+If caller writes:
+calculateDosaOrder("plain")
+
+Then internally:
+
+type = "plain"
+quantity = 1
+isSpicy = false
+
+Because they were not passed.
+
+If caller writes:
+calculateDosaOrder("masala", 3)
+
+Then:
+
+type = "masala"
+quantity = 3
+isSpicy = false
+
+Because third argument missing → default false used.
+
+If caller writes:
+calculateDosaOrder("butter", 2, true)
+
+Then:
+
+type = "butter"
+quantity = 2
+isSpicy = true
+
+Because it was explicitly passed.
+
+🔹 Why This Is Useful?
+
+Before ES6, we had to write:
+
+quantity = quantity || 1
+
+But that breaks if quantity = 0.
+
+Default parameters solve this cleanly.
+
+🔹 Important Behavior (Interview Trick)
+
+Defaults only apply when argument is:
+
+undefined
+
+Not when it is:
+
+null
+false
+0
+
+Example:
+
+calculateDosaOrder("plain", undefined, true)
+
+→ quantity becomes 1
+
+But:
+
+calculateDosaOrder("plain", 0)
+
+→ quantity stays 0 (and your validation rejects it)
+ */
